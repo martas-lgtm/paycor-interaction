@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --navy: #1F2C4B;
+            --blue: #00A1E0;
+            --yellow: #f1c40f;
+            --success: #27ae60;
+            --border: #E2E8F0;
+            --shadow: rgba(31, 44, 75, 0.08);
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            color: #333;
+            background-color: transparent;
+        }
+
+        .main-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 50px;
+            align-items: start;
+        }
+
+        /* --- CONTENT STYLING --- */
+        .title-section { height: 95px; margin-bottom: 35px; }
+        .title-section h1 { color: var(--navy); font-size: 34px; font-weight: 800; margin: 0 0 12px 0; }
+        .accent-line { width: 100px; height: 5px; background: linear-gradient(to right, var(--yellow), var(--navy)); border-radius: 10px; }
+
+        .info-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 12px 24px var(--shadow);
+        }
+
+        .card-header { display: flex; align-items: center; gap: 15px; margin-bottom: 22px; }
+        .icon-stack { position: relative; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; flex-shrink: 0; }
+        .icon-stack .fa-circle { color: var(--navy); font-size: 44px; }
+        .icon-stack .inner-icon { position: absolute; color: var(--yellow); font-size: 20px; }
+        .card-header h2 { font-size: 22px; font-weight: 700; color: var(--navy); margin: 0; }
+
+        .info-list { list-style: none; padding: 0; margin: 0; }
+        .info-list li { position: relative; padding-left: 28px; margin-bottom: 15px; line-height: 1.6; }
+        .info-list li::before { content: '•'; position: absolute; left: 0; color: var(--navy); font-weight: bold; font-size: 24px; line-height: 1; }
+        .info-list li ul { list-style: none; padding: 8px 0 0 20px; }
+        .info-list li ul li::before { content: '○'; position: absolute; left: 0; color: var(--navy); font-size: 14px; }
+
+        .highlight-text { color: var(--navy); background: #FFF9E6; padding: 2px 8px; border-radius: 6px; font-weight: 700; border: 1px solid rgba(241, 196, 15, 0.3); }
+        .text-link { color: var(--blue); text-decoration: underline; font-weight: 600; }
+
+        /* --- ANIMATIONS --- */
+        @keyframes pulse-yellow { 
+            0% { box-shadow: 0 0 0 0 rgba(241, 196, 15, 0.7); } 
+            70% { box-shadow: 0 0 0 15px rgba(241, 196, 15, 0); } 
+            100% { box-shadow: 0 0 0 0 rgba(241, 196, 15, 0); } 
+        }
+
+        @keyframes slideUpFade { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- REVEAL BUTTON --- */
+        .reveal-btn {
+            width: 100%;
+            background-color: var(--navy);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 14px;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center; justify-content: center; gap: 12px;
+            margin: 15px 0 35px 0;
+            transition: all 0.4s ease;
+            box-shadow: 0 6px 15px rgba(31, 44, 75, 0.3);
+        }
+
+        .reveal-btn:not(.active) { animation: pulse-yellow 2.5s infinite; }
+        .reveal-btn.active { background-color: #F1F5F9; color: var(--navy); border: 1px solid var(--border); animation: none; }
+
+        #navigating-block { display: none; opacity: 0; }
+        #navigating-block.show { display: block; opacity: 1; animation: slideUpFade 0.6s forwards; }
+
+        /* --- PHONE MOCKUP --- */
+        .phone-wrapper { display: flex; justify-content: center; align-items: flex-start; padding: 20px; position: sticky; top: 20px; margin-top: 130px; }
+        .phone-frame { width: 280px; height: 560px; background: #000; border-radius: 45px; padding: 12px; box-shadow: 0 30px 60px rgba(0,0,0,0.15); border: 4px solid #F1F5F9; position: relative; }
+        .phone-screen { width: 100%; height: 100%; background: #fff; border-radius: 35px; overflow: hidden; display: flex; flex-direction: column; position: relative; }
+        
+        .app-header { background: #fff; border-bottom: 1px solid #eee; padding: 20px 15px; text-align: center; font-weight: 700; color: #333; font-size: 16px; position: relative; }
+        .app-header i { position: absolute; left: 20px; top: 22px; color: #666; }
+        
+        .app-content { padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+        .ui-label { font-size: 12px; font-weight: 600; color: #444; }
+        .ui-label span { color: #d9534f; margin-right: 4px; }
+        .ui-input { width: 100%; height: 42px; border: 1px solid #ccc; border-radius: 6px; display: flex; align-items: center; justify-content: space-between; padding: 0 12px; box-sizing: border-box; font-size: 14px; color: #333; }
+        
+        .ui-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .ui-btn { height: 45px; border-radius: 6px; border: 1px solid #ccc; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; }
+        .btn-active { background: var(--navy); color: #fff; border: none; }
+
+        .save-btn { 
+            margin-top: 10px; 
+            background: var(--blue); 
+            color: #fff; 
+            border: none; 
+            padding: 15px; 
+            border-radius: 10px; 
+            font-weight: 800; 
+            font-size: 12px; 
+            transition: all 0.5s ease; 
+            opacity: 0.6; 
+        }
+
+        .save-btn.ready { 
+            background: var(--navy); 
+            opacity: 1; 
+            animation: pulse-yellow 2s infinite; 
+            cursor: pointer; 
+        }
+
+        .instruction-line {
+            font-size: 11px;
+            color: var(--navy);
+            text-align: center;
+            font-style: italic;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            margin-top: -5px;
+        }
+
+        .instruction-line.visible { opacity: 0.8; }
+
+        /* --- SUCCESS OVERLAY --- */
+        .success-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.95);
+            display: none;
+            flex-direction: column;
+            align-items: center; justify-content: center;
+            z-index: 10;
+            text-align: center;
+        }
+        .success-overlay.active { display: flex; animation: fadeIn 0.3s ease; }
+        .checkmark { font-size: 60px; color: var(--success); margin-bottom: 15px; transform: scale(0); }
+        .success-overlay.active .checkmark { animation: popIn 0.5s cubic-bezier(0.17, 0.89, 0.32, 1.49) forwards; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes popIn { from { transform: scale(0); } to { transform: scale(1); } }
+
+        @media (max-width: 900px) { 
+            .main-container { grid-template-columns: 1fr; } 
+            .phone-wrapper { order: -1; position: static; margin-top: 0; } 
+            .title-section { height: auto; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-container">
+    <div class="content-side">
+        <div class="title-section">
+            <h1>Navigating Paycor</h1>
+            <div class="accent-line"></div>
+        </div>
+
+        <div class="info-card">
+            <div class="card-header">
+                <div class="icon-stack"><i class="fa-solid fa-circle"></i><i class="fa-solid fa-clock inner-icon"></i></div>
+                <h2>Clocking In and Out</h2>
+            </div>
+            <ul class="info-list">
+                <li>Clock in under <span class="highlight-text">In-Person Tutor, Code 82</span></li>
+                <li>You are allowed to clock-in <strong>10 minutes prior</strong> to your start time and <strong>5 minutes after</strong> your end time</li>
+            </ul>
+        </div>
+
+        <button class="reveal-btn" id="toggleBtn" onclick="toggleNavigating()">
+            <span>More Paycor Details</span>
+            <i class="fa-solid fa-chevron-down"></i>
+        </button>
+
+        <div id="navigating-block">
+            <div class="info-card">
+                <div class="card-header">
+                    <div class="icon-stack"><i class="fa-solid fa-circle"></i><i class="fa-solid fa-compass inner-icon"></i></div>
+                    <h2>Navigating Paycor</h2>
+                </div>
+                <ul class="info-list">
+                    <li>Please download the <strong>Paycor App</strong>
+                        <ul><li>You may also access <a href="https://www.paycor.com/" target="_blank" class="text-link">Paycor</a> on your web browser</li></ul>
+                    </li>
+                    <li>You can report a missed punch through the app</li>
+                    <li>If you have any concerns or questions, email: <a href="mailto:payroll@studysmarttutors.com" class="text-link">payroll@studysmarttutors.com</a></li>
+                    <li>For a general overview, see our <a href="https://scribehow.com/page/Study_Smart_Tutors_Paycor_Guide__b2zxCFMJTVeDbkCcqwvE0A" target="_blank" class="text-link">Paycor Guide.</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phone-wrapper">
+        <div class="phone-frame">
+            <div class="phone-screen">
+                <div class="success-overlay" id="successOverlay">
+                    <i class="fa-solid fa-circle-check checkmark"></i>
+                    <h3 style="color:var(--navy)">Punch Saved!</h3>
+                </div>
+                <div class="app-header"><i class="fa-solid fa-chevron-left"></i>Create Punch</div>
+                <div class="app-content">
+                    <div class="ui-label"><span>*</span>Status Type</div>
+                    <div class="ui-input">Auto <i class="fa-solid fa-caret-down" style="color:#888"></i></div>
+                    <div class="ui-label"><span>*</span>Activity Type</div>
+                    <div class="ui-grid">
+                        <div class="ui-btn btn-active">Work</div><div class="ui-btn">Meal</div>
+                        <div class="ui-btn">Break</div><div class="ui-btn">Transfer</div>
+                    </div>
+                    <div class="ui-label"><span>*</span>Department</div>
+                    <div class="ui-input" style="font-size: 13px;">Your Scheduled Department <i class="fa-solid fa-caret-down" style="color:#888"></i></div>
+                    <button class="save-btn" id="phoneSaveBtn" onclick="triggerPunch()">Save Punch</button>
+                    <div class="instruction-line" id="phoneInstruction">Click the button to confirm</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Communication with Articulate Rise
+    function sendDoneToRise() {
+        try {
+            // This is the standard Articulate Rise completion signal
+            window.parent.postMessage("completed", "*");
+        } catch (e) {
+            console.log("Rise API not found, but punch triggered locally.");
+        }
+    }
+
+    function toggleNavigating() {
+        const block = document.getElementById("navigating-block");
+        const btn = document.getElementById("toggleBtn");
+        const phoneBtn = document.getElementById("phoneSaveBtn");
+        const instruction = document.getElementById("phoneInstruction");
+        
+        const isShowing = block.classList.toggle("show");
+        btn.classList.toggle("active");
+        
+        if (isShowing) {
+            btn.querySelector("span").innerText = "Show Less";
+            btn.querySelector("i").className = "fa-solid fa-chevron-up";
+            phoneBtn.classList.add("ready");
+            instruction.classList.add("visible");
+        } else {
+            btn.querySelector("span").innerText = "More Paycor Details";
+            btn.querySelector("i").className = "fa-solid fa-chevron-down";
+            phoneBtn.classList.remove("ready");
+            instruction.classList.remove("visible");
+        }
+    }
+
+    function triggerPunch() {
+        const btn = document.getElementById("phoneSaveBtn");
+        if (!btn.classList.contains("ready")) return;
+
+        const overlay = document.getElementById("successOverlay");
+        overlay.classList.add("active");
+
+        // Tell Rise we are done
+        sendDoneToRise();
+
+        setTimeout(() => {
+            overlay.classList.remove("active");
+        }, 2000);
+    }
+</script>
+
+</body>
+</html>
